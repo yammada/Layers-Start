@@ -10,11 +10,17 @@ import UIKit
 
 class RainforestCardCell: UICollectionViewCell {
   var featureImageSizeOptional: CGSize?
+    var placeholderLayer: CALayer!
   
   override func awakeFromNib() {
     super.awakeFromNib()
-    contentView.layer.borderColor = UIColor(hue: 0, saturation: 0, brightness: 0.85, alpha: 0.2).CGColor
-    contentView.layer.borderWidth = 1
+    
+    placeholderLayer = CALayer()
+    placeholderLayer.contents = UIImage(named: "cardPlaceholder")!.CGImage
+    placeholderLayer.contentsGravity = kCAGravityCenter
+    placeholderLayer.contentsScale = UIScreen.mainScreen().scale
+    placeholderLayer.backgroundColor = UIColor(hue: 0, saturation: 0, brightness: 0.85, alpha: 1).CGColor
+    contentView.layer.addSublayer(placeholderLayer)
   }
 
   //MARK: Layout
@@ -28,6 +34,11 @@ class RainforestCardCell: UICollectionViewCell {
   
   override func layoutSubviews() {
     super.layoutSubviews()
+    
+    CATransaction.begin()
+    CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
+    placeholderLayer?.frame = self.bounds
+    CATransaction.commit()
   }
   
   //MARK: Cell Reuse
